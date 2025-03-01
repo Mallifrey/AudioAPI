@@ -184,30 +184,32 @@ public class AudioHandler : IDisposable
 
     public void Send(byte[] data, int length, Func<ExPlayer, bool> receivePredicate = null)
     {
-        if (data is null)
-            throw new ArgumentNullException(nameof(data));
-        
-        if (length < 0 || length > data.Length)
-            throw new ArgumentOutOfRangeException(nameof(length));
-        
-        if (!Id.HasValue)
-            throw new Exception("This audio handler does not have an ID.");
+        if (data is null) throw new ArgumentNullException(nameof(data));
+        if (length < 0 || length > data.Length) throw new ArgumentOutOfRangeException(nameof(length));
+        if (!Id.HasValue) throw new Exception("This audio handler does not have an ID.");
         
         var message = default(AudioMessage?);
-        
-        foreach (var player in ExPlayer.Players)
-        {
-            if (!player)
-                continue;
 
-            if (receivePredicate != null && !receivePredicate(player))
-                continue;
+        ExPlayer.Players.ForEach(player =>
+        {
+            if (!player) return;
+            if (receivePredicate != null && !receivePredicate(player)) return;
 
             if (!message.HasValue)
                 message = new AudioMessage(Id.Value, data, length);
-            
+
             player.Connection.Send(message.Value);
-        }
+        });
+    }
+
+    public void Send(ExPlayer player, byte[] data, int length)
+    {
+        if (data is null) throw new ArgumentNullException(nameof(data));
+        if (length < 0 || length > data.Length) throw new ArgumentOutOfRangeException(nameof(length));
+        if (!Id.HasValue) throw new Exception("This audio handler does not have an ID.");
+        if (!player) throw new ArgumentNullException(nameof(player));
+        
+        player.Connection.Send(new AudioMessage(Id.Value, data, length));
     }
     
     public void Dispose()
