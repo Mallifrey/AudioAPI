@@ -16,6 +16,7 @@ using UnityEngine;
 using Utils.NonAllocLINQ;
 
 using VoiceChat.Networking;
+using LabApi.Events.Handlers;
 
 namespace AudioAPI;
 
@@ -104,8 +105,8 @@ public class AudioHandler : IDisposable
         GameObject = new GameObject(Name);
 
         Handlers.Add(name, this);
-        
-        RoundEvents.OnRoundRestarted += Dispose;
+
+        ExRoundEvents.Restarting += Dispose;
     }
 
     public void ForEachSpeaker(Action<SpeakerToy> action)
@@ -214,7 +215,7 @@ public class AudioHandler : IDisposable
     
     public void Dispose()
     {
-        RoundEvents.OnRoundRestarted -= Dispose;
+        ExRoundEvents.Restarting -= Dispose;
 
         if (Player != null && !Player.IsDisposed)
             Player.Dispose();
