@@ -15,6 +15,7 @@ using VoiceChat;
 
 namespace AudioAPI;
 
+using LabApi.Events.Handlers;
 using Playback;
 
 public static class AudioManager
@@ -165,9 +166,9 @@ public static class AudioManager
         watcher.Created += OnFileAdded;
         watcher.EnableRaisingEvents = true;
 
-        RoundEvents.OnRoundRestarted += AudioHandler.OnRoundRestart;
-        RoundEvents.OnRoundRestarted += AudioPool.Shared.OnRoundRestart;
-        RoundEvents.OnWaitingForPlayers += AudioPool.Shared.OnRoundWait;
+        ExRoundEvents.Restarting += AudioHandler.OnRoundRestart;
+        ExRoundEvents.Restarting += AudioPool.Shared.OnRoundRestart;
+        ExRoundEvents.WaitingForPlayers += AudioPool.Shared.OnRoundWait;
         
         PlayerLoopHelper.ModifySystem(x => x.InjectAfter<TimeUpdate.WaitForLastPresentationAndUpdateTime>(OnUpdate, typeof(AudioUpdateLoop)) ? x : null);
         

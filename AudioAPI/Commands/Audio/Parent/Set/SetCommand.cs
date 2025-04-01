@@ -39,7 +39,7 @@ public class SetCommand : CustomCommand<SetCommand.Arguments>
         {
             handler.ParentTransform = collection.Target.CameraTransform;
             
-            ctx.RespondOk($"Set {handler.Speakers.Count} speaker(s) to {collection.Target.Name}");
+            ctx.RespondOk($"Set {handler.Speakers.Count} speaker(s) to {collection.Target.Nickname}");
             return;
         }
         
@@ -51,6 +51,6 @@ public class SetCommand : CustomCommand<SetCommand.Arguments>
 
         speaker.transform.parent = collection.Target.CameraTransform;
         
-        ctx.RespondOk($"Set parent to {collection.Target.Name}");
+        ctx.RespondOk($"Set parent to {collection.Target.Nickname}");
     }
 }
