@@ -14,6 +14,9 @@ public partial class AudioCommand : CommandBase
     ) {
         var handler = AudioHandler.GetOrAdd(name, x =>
         {
+            if (speakers == null)
+                return;
+
             foreach (var speaker in speakers)
             {
                 x.AddSpeaker(speaker);
