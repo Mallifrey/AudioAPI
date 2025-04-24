@@ -1,24 +1,17 @@
-﻿using LabExtended.API;
-using LabExtended.Extensions;
+﻿using LabExtended.Extensions;
 
 using LabExtended.Commands;
-using LabExtended.Commands.Arguments;
-using LabExtended.Commands.Interfaces;
-
 using NorthwoodLib.Pools;
+using LabExtended.Commands.Attributes;
 
-namespace AudioAPI.Commands.List.Clips;
+namespace AudioAPI.Commands.List;
 
-public class ClipsCommand : CustomCommand
+public partial class ListCommand : CommandBase
 {
-    public override string Command { get; } = "clips";
-    public override string Description { get; } = "Lists all loaded audio clips.";
-
-    public override void OnCommand(ExPlayer sender, ICommandContext ctx, ArgumentCollection args)
+    [CommandOverload("clips", "Lists all loaded audio clips.")]
+    public void ListClips()
     {
-        base.OnCommand(sender, ctx, args);
-        
-        ctx.RespondOk(StringBuilderPool.Shared.BuildString(x =>
+        Ok(StringBuilderPool.Shared.BuildString(x =>
         {
             AudioManager.LoadFiles();
             

@@ -1,34 +1,8 @@
-﻿using AudioAPI.Commands.Audio.Create;
-using AudioAPI.Commands.Audio.Destroy;
-using AudioAPI.Commands.Audio.Pause;
-using AudioAPI.Commands.Audio.Play;
-using AudioAPI.Commands.Audio.Stop;
-using AudioAPI.Commands.Audio.Volume;
-
-using CommandSystem;
-
-using LabExtended.Commands;
+﻿using LabExtended.Commands;
+using LabExtended.Commands.Attributes;
+using LabExtended.Commands.Interfaces;
 
 namespace AudioAPI.Commands.Audio;
 
-[CommandHandler(typeof(RemoteAdminCommandHandler))]
-[CommandHandler(typeof(GameConsoleCommandHandler))]
-public class AudioCommand : VanillaParentCommandBase
-{
-    public override string Command { get; } = "audio";
-    public override string Description { get; } = "Audio management commands.";
-
-    public override void LoadGeneratedCommands()
-    {
-        base.LoadGeneratedCommands();
-        
-        RegisterCommand(new CreateCommand());
-        RegisterCommand(new DestroyCommand());
-        RegisterCommand(new VolumeCommand());
-        RegisterCommand(new PlayCommand());
-        RegisterCommand(new PauseCommand());
-        RegisterCommand(new StopCommand());
-        
-        RegisterCommand(new Parent.ParentCommand());
-    }
-}
+[Command("audio", "Audio management commands.")]
+public partial class AudioCommand : CommandBase, IServerSideCommand { }
