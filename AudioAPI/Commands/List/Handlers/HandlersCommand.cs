@@ -1,24 +1,18 @@
-﻿using LabExtended.API;
-using LabExtended.Extensions;
+﻿using LabExtended.Extensions;
 
 using LabExtended.Commands;
-using LabExtended.Commands.Arguments;
-using LabExtended.Commands.Interfaces;
 
 using NorthwoodLib.Pools;
+using LabExtended.Commands.Attributes;
 
-namespace AudioAPI.Commands.List.Handlers;
+namespace AudioAPI.Commands.List;
 
-public class HandlersCommand : CustomCommand
+public partial class ListCommand : CommandBase
 {
-    public override string Command { get; } = "handlers";
-    public override string Description { get; } = "Lists all audio handlers.";
-
-    public override void OnCommand(ExPlayer sender, ICommandContext ctx, ArgumentCollection args)
+    [CommandOverload("handlers", "Lists all audio handlers.")]
+    public void ListHandlers ()
     {
-        base.OnCommand(sender, ctx, args);
-        
-        ctx.RespondOk(StringBuilderPool.Shared.BuildString(x =>
+        Ok(StringBuilderPool.Shared.BuildString(x =>
         {
             if (AudioHandler.Handlers.Count < 1)
             {

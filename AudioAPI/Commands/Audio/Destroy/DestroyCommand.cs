@@ -1,36 +1,22 @@
-﻿using LabExtended.API;
-
-using LabExtended.Commands;
+﻿using LabExtended.Commands;
 using LabExtended.Commands.Attributes;
-using LabExtended.Commands.Interfaces;
 
-namespace AudioAPI.Commands.Audio.Destroy;
+namespace AudioAPI.Commands.Audio;
 
-public class DestroyCommand : CustomCommand<DestroyCommand.Arguments>
+public partial class AudioCommand : CommandBase
 {
-    public class Arguments
+    [CommandOverload("destroy", "Destroys an audio handler.")]
+    public void AudioDestroy([CommandParameter("Name", "Name of the audio handler.")] string name)
     {
-        [CollectionParameter(Name = "Name", Description = "Name of the audio handler.")]
-        public string Name { get; set; } = string.Empty;
-    }
-    
-    public override string Command { get; } = "destroy";
-    public override string Description { get; } = "Destroys an audio handler.";
 
-    public override Arguments Instantiate() => new Arguments();
-
-    public override void OnCommand(ExPlayer sender, ICommandContext ctx, Arguments collection)
-    {
-        base.OnCommand(sender, ctx, collection);
-
-        if (!AudioHandler.TryGetHandler(collection.Name, out AudioHandler audioHandler))
+        if (!AudioHandler.TryGetHandler(name, out AudioHandler audioHandler))
         {
-            ctx.RespondFail($"Audio handler not found: {collection.Name}");
+            Fail($"Audio handler not found: {name}");
             return;
         }
         
         audioHandler.Dispose();
         
-        ctx.RespondOk($"Audio handler has been destroyed.");
+        Ok($"Audio handler has been destroyed.");
     }
 }
